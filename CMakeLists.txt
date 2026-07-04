@@ -3,8 +3,7 @@ project(ProtonPrefixes)
 
 set(CMAKE_CXX_STANDARD 26)
 
-add_executable(ProtonPrefixes
-        main.cpp
+add_executable(ProtonPrefixes main.cpp
         colored-cout.h
         utils.cpp
         utils.h
