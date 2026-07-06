@@ -1,5 +1,6 @@
 #include "colored-cout.h"
 #include "names.h"
+
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -68,8 +69,16 @@ int main()
 {
     if (!std::filesystem::exists(std::filesystem::current_path().string() + "/games.json"))
     {
-        system("touch games.json");
         system("echo '{}' > games.json");
+    }
+
+    if (!std::filesystem::exists(std::filesystem::current_path().string() + "/api.txt"))
+    {
+        std::cout << clr::red << "Enter your Steam API key: ";
+        std::string key{};
+        std::cin >> key;
+        std::string command{"echo '" + key + "' > api.txt"};
+        system(command.c_str());
     }
 
     std::filesystem::path pfxC{"/home/marcos/.steam/steam/steamapps/compatdata"};

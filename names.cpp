@@ -1,6 +1,8 @@
 #include "names.h"
+
 #include "colored-cout.h"
 #include "utils.h"
+
 #include <cpr/cpr.h>
 #include <fstream>
 #include <iostream>
@@ -8,9 +10,12 @@
 
 std::string getNameFromAppID(unsigned long appID)
 {
-    std::string apiKey{"C4A3344741D6DC0DF379A97E9B3E83D3"};
+    std::string apiKey{""};
     std::string url{"https://api.steampowered.com/IStoreService/GetAppList/v1/"};
     std::string appName{};
+
+    std::ifstream apiFile{"api.txt"};
+    apiFile >> apiKey;
 
     std::ifstream jsonFile{"games.json"};
     auto jsonNames = nlohmann::json::parse(jsonFile);
