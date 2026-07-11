@@ -113,9 +113,15 @@ int main()
     }
 
     std::filesystem::path create{jsonData["create"]};
-    std::filesystem::path pfx1{jsonData["searchPaths"]["path1"]};
 
-    createSymlinks(pfx1, create);
+    if (jsonData.contains("searchPaths") && jsonData["searchPaths"].is_object())
+    {
+        for (const auto& [key, value] : jsonData["searchPaths"].items())
+        {
+            std::filesystem::path pfx{value};
+            createSymlinks(pfx, create);
+        }
+    }
 
     return 0;
 }
