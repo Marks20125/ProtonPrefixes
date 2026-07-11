@@ -7,7 +7,7 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 
-void printSeparatorWithText(std::string& text)
+void printSeparatorWithText(std::string text)
 {
     std::cout << clr::cyan << "=====================[" << text << "]=====================" << '\n';
 }

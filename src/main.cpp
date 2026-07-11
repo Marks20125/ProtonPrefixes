@@ -9,23 +9,62 @@
 
 void setup()
 {
-    if (!std::filesystem::exists(std::filesystem::current_path().string() + "/games.json"))
-    {
-        system("echo '{}' > games.json");
-    }
+    printSeparatorWithText("Initial setup");
 
     std::ifstream readJson{"games.json"};
     auto jsonData = nlohmann::json::parse(readJson);
     if (jsonData["api"].empty())
     {
-        std::cout << clr::red << "Enter your Steam API key: ";
+        std::cout << clr::yellow << "Enter your Steam API key: ";
         std::string key{};
         std::cin >> key;
         std::string path{"/api"};
         writeToJson(path, key);
-        std::cout << clr::red << "Key saved. Please, run the program again";
-        std::exit(0);
+        std::cout << '\n';
     }
+
+    if (jsonData["create"].empty())
+    {
+        std::cout << clr::yellow << "Enter a path to save the symlinks. It MUST be an absolute path\n"
+                  << "Example: /home/<user>/.compatdata\n"
+                  << ">";
+
+        std::string create{""};
+        std::cin >> create;
+        std::string path{"/create"};
+        writeToJson(path, create);
+        std::cout << '\n';
+    }
+
+    if (jsonData["searchPaths"].empty())
+    {
+        std::cout << clr::yellow << "Enter the paths to search for prefixes. They MUST be absolute paths.\n"
+                  << "Example: /home/<user>/.steam/steam/steamapps/compatdata\n"
+                  << clr::red << "Type 'Done' when you're done\n";
+
+        for (int i = 1; i < 10000; i++)
+        {
+            std::string path{""};
+            std::cout << clr::yellow << ">";
+            std::cin >> path;
+
+            if (path != "Done")
+            {
+                std::string jsonPath{"/searchPaths/path" + std::to_string(i)};
+                writeToJson(jsonPath, path);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+    std::cout << clr::red << "Setup completed. Restart the program.";
+    std::string path{"/hasBeenRun"};
+    std::string value{"true"};
+    writeToJson(path, value);
+    std::exit(0);
 }
 
 void createSymlinks(std::filesystem::path& pfx, std::filesystem::path& create)
@@ -37,7 +76,7 @@ void createSymlinks(std::filesystem::path& pfx, std::filesystem::path& create)
             std::cout << clr::white << "Processing " << entry.path().filename().string() << '\n';
             std::filesystem::path gamePath{entry.path().string() + "/pfx/drive_c"};
             std::string gameName{getNameFromAppID(stoul(entry.path().filename().string()), gamePath)};
-            std::filesystem::path symlinkPath{create.string() + gameName};
+            std::filesystem::path symlinkPath{create.string() + "/" + gameName};
 
             if (gameName != "invalid" && !std::filesystem::exists(symlinkPath))
             {
@@ -60,14 +99,23 @@ void createSymlinks(std::filesystem::path& pfx, std::filesystem::path& create)
 
 int main()
 {
-    setup();
+    if (!std::filesystem::exists(std::filesystem::current_path().string() + "/games.json"))
+    {
+        system("echo '{}' > games.json");
+    }
 
-    std::filesystem::path pfxC{"/home/marcos/.steam/steam/steamapps/compatdata"};
-    std::filesystem::path pfxD{"/mnt/Games/SteamLibrary/steamapps/compatdata"};
-    std::filesystem::path create{"/home/marcos/.compatdata/"};
+    std::ifstream readJsonFile{"games.json"};
+    auto jsonData = nlohmann::json::parse(readJsonFile);
 
-    createSymlinks(pfxC, create);
-    createSymlinks(pfxD, create);
+    if (jsonData["hasBeenRun"].empty())
+    {
+        setup();
+    }
+
+    std::filesystem::path create{jsonData["create"]};
+    std::filesystem::path pfx1{jsonData["searchPaths"]["path1"]};
+
+    createSymlinks(pfx1, create);
 
     return 0;
 }

@@ -18,6 +18,9 @@ This is a tool to help you identify which proton prefix is which, using symlinks
    ./ProtonPrefixes
    ```
 
+>[!WARNING]
+>Please, avoid touching the json file the program creates unless you know what you're doing
+
 # Building
 ## Requirements
 - CMake
