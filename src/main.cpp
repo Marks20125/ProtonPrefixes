@@ -60,11 +60,7 @@ void setup()
         }
     }
 
-    std::cout << clr::red << "Setup completed. Restart the program.";
-    std::string path{"/hasBeenRun"};
-    std::string value{"true"};
-    writeToJson(path, value);
-    std::exit(0);
+    std::cout << clr::red << "Setup completed";
 }
 
 void createSymlinks(std::filesystem::path& pfx, std::filesystem::path& create)
@@ -97,7 +93,7 @@ void createSymlinks(std::filesystem::path& pfx, std::filesystem::path& create)
     }
 }
 
-int main()
+int main(int argc, char* argv[])
 {
     if (!std::filesystem::exists(std::filesystem::current_path().string() + "/games.json"))
     {
@@ -107,9 +103,33 @@ int main()
     std::ifstream readJsonFile{"games.json"};
     auto jsonData = nlohmann::json::parse(readJsonFile);
 
-    if (jsonData["hasBeenRun"].empty())
+    if (argc > 1 && std::string_view(argv[1]) == "setup")
     {
+        if (argc > 2 && std::string_view(argv[2]) == "api")
+        {
+            jsonData.erase("api");
+        }
+        else if (argc > 2 && std::string_view(argv[2]) == "create")
+        {
+            jsonData.erase("create");
+        }
+        else if (argc > 2 && std::string_view(argv[2]) == "paths")
+        {
+            jsonData.erase("searchPaths");
+        }
+
+        std::ofstream writeJsonFile{"games.json"};
+        writeJsonFile << jsonData.dump(4);
+        writeJsonFile.close();
+
         setup();
+        std::exit(0);
+    }
+
+    if (jsonData["searchPaths"].empty())
+    {
+        std::cout << clr::red << "Program is not configured. Run './ProtonPrefixes setup'";
+        std::exit(0);
     }
 
     std::filesystem::path create{jsonData["create"]};
