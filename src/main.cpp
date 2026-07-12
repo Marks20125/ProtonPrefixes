@@ -93,27 +93,56 @@ void createSymlinks(std::filesystem::path& pfx, std::filesystem::path& create)
     }
 }
 
+void clean(std::filesystem::path& create)
+{
+    std::cout << clr::yellow << "Searching for symlinks for prefixes that no longer exist\n";
+
+    bool hasBeenFound{false};
+
+    for (const auto& entry : std::filesystem::directory_iterator(create))
+    {
+        if (!std::filesystem::exists(std::filesystem::read_symlink(entry)))
+        {
+            hasBeenFound = true;
+            std::cout << clr::red << entry.path().filename().string() << " prefix doesn't exist anymore, deleting folder\n";
+            std::filesystem::remove(entry.path());
+        }
+    }
+    if (hasBeenFound == false)
+    {
+        std::cout << clr::green << "No folders were deleted\n";
+    }
+}
+
 int main(int argc, char* argv[])
 {
     if (!std::filesystem::exists(std::filesystem::current_path().string() + "/games.json"))
     {
-        system("echo '{}' > games.json");
+        std::ofstream createJson{"games.json"};
+        createJson << "{}";
     }
 
     std::ifstream readJsonFile{"games.json"};
     auto jsonData = nlohmann::json::parse(readJsonFile);
+    std::filesystem::path create{jsonData["create"]};
 
-    if (argc > 1 && std::string_view(argv[1]) == "setup")
+    if (jsonData["searchPaths"].empty())
     {
-        if (argc > 2 && std::string_view(argv[2]) == "api")
+        std::cout << clr::red << "Program is not configured. Run './ProtonPrefixes setup'";
+        std::exit(0);
+    }
+
+    if (argc >= 2 && std::string_view(argv[1]) == "setup")
+    {
+        if (argc == 3 && std::string_view(argv[2]) == "api")
         {
             jsonData.erase("api");
         }
-        else if (argc > 2 && std::string_view(argv[2]) == "create")
+        else if (argc == 3 && std::string_view(argv[2]) == "create")
         {
             jsonData.erase("create");
         }
-        else if (argc > 2 && std::string_view(argv[2]) == "paths")
+        else if (argc == 3 && std::string_view(argv[2]) == "paths")
         {
             jsonData.erase("searchPaths");
         }
@@ -126,21 +155,32 @@ int main(int argc, char* argv[])
         std::exit(0);
     }
 
-    if (jsonData["searchPaths"].empty())
+    if (argc == 2 && std::string_view(argv[1]) == "clean")
     {
-        std::cout << clr::red << "Program is not configured. Run './ProtonPrefixes setup'";
+        clean(create);
         std::exit(0);
     }
 
-    std::filesystem::path create{jsonData["create"]};
-
-    if (jsonData.contains("searchPaths") && jsonData["searchPaths"].is_object())
+    if (argc == 2 && std::string_view(argv[1]) == "run")
     {
-        for (const auto& [key, value] : jsonData["searchPaths"].items())
+        if (jsonData.contains("searchPaths") && jsonData["searchPaths"].is_object())
         {
-            std::filesystem::path pfx{value};
-            createSymlinks(pfx, create);
+            for (const auto& [key, value] : jsonData["searchPaths"].items())
+            {
+                std::filesystem::path pfx{value};
+                createSymlinks(pfx, create);
+            }
         }
+    }
+
+    if (argc == 2 && std::string_view(argv[1]) == "-h")
+    {
+        printHelp();
+    }
+
+    if (argc == 1)
+    {
+        std::cout << clr::red << "Error: " << clr::white << "You must specify at least one parameter (-h for help)";
     }
 
     return 0;

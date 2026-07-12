@@ -10,8 +10,10 @@ This is a tool to help you identify which proton prefix is which, using symlinks
 - For non-Steam games, contents of popular gamesave folders are shown, such as all of AppData and Documents. If the user still can't identify the game, yazi will open to let them navigate the prefix freely.
 
 # Usage
-## Normal run
-`./ProtonPrefixes`
+## Help
+`./ProtonPrefixes -h`
+## Create symlinks
+`./ProtonPrefixes run`
 ## Setup
 ### First-time setup
 `./ProtonPrefixes setup`
@@ -19,6 +21,8 @@ This is a tool to help you identify which proton prefix is which, using symlinks
 - API key: `./ProtonPrefixes setup api`
 - Creation path: `./ProtonPrefixes setup create`
 - Search paths: `./ProtonPrefixes setup paths`
+## Clean
+`./ProtonPrefixes clean`
 
 >[!WARNING]
 >Please, avoid touching the json file the program creates unless you know what you're doing
