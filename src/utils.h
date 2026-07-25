@@ -1,5 +1,4 @@
-#ifndef PROTONPREFIXES_UTILS_H
-#define PROTONPREFIXES_UTILS_H
+#include <filesystem>
 #include <string>
 
 void printSeparatorWithText(std::string text);
@@ -7,4 +6,8 @@ void printFolderContents(std::string folderPath);
 void writeToJson(std::string& path, std::string& value);
 void printHelp();
 
-#endif // PROTONPREFIXES_UTILS_H
+namespace paths
+{
+extern std::string homeDir;
+extern std::filesystem::path jsonPath;
+} // namespace paths

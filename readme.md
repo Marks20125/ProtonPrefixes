@@ -23,9 +23,8 @@ This is a tool to help you identify which proton prefix is which, using symlinks
 - Search paths: `./ProtonPrefixes setup paths`
 ## Clean
 `./ProtonPrefixes clean`
-
->[!WARNING]
->Please, avoid touching the json file the program creates unless you know what you're doing
+## Identify
+`./ProtonPrefixes identify <ID>`
 
 # Building
 ## Requirements

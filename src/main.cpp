@@ -11,7 +11,7 @@ void setup()
 {
     printSeparatorWithText("Initial setup");
 
-    std::ifstream readJson{"games.json"};
+    std::ifstream readJson{paths::jsonPath};
     auto jsonData = nlohmann::json::parse(readJson);
     if (jsonData["api"].empty())
     {
@@ -31,6 +31,12 @@ void setup()
 
         std::string create{""};
         std::cin >> create;
+
+        if (!std::filesystem::exists(create))
+        {
+            std::filesystem::create_directory(create);
+        }
+
         std::string path{"/create"};
         writeToJson(path, create);
         std::cout << '\n';
@@ -116,13 +122,13 @@ void clean(std::filesystem::path& create)
 
 int main(int argc, char* argv[])
 {
-    if (!std::filesystem::exists(std::filesystem::current_path().string() + "/games.json"))
+    if (!std::filesystem::exists(paths::jsonPath))
     {
-        std::ofstream createJson{"games.json"};
+        std::ofstream createJson{paths::jsonPath};
         createJson << "{}";
     }
 
-    std::ifstream readJsonFile{"games.json"};
+    std::ifstream readJsonFile{paths::jsonPath};
     auto jsonData = nlohmann::json::parse(readJsonFile);
 
     if (argc >= 2 && std::string_view(argv[1]) == "setup")
@@ -140,7 +146,7 @@ int main(int argc, char* argv[])
             jsonData.erase("searchPaths");
         }
 
-        std::ofstream writeJsonFile{"games.json"};
+        std::ofstream writeJsonFile{paths::jsonPath};
         writeJsonFile << jsonData.dump(4);
         writeJsonFile.close();
 
@@ -177,6 +183,20 @@ int main(int argc, char* argv[])
     if (argc == 2 && std::string_view(argv[1]) == "-h")
     {
         printHelp();
+    }
+
+    if (std::string_view(argv[1]) == "identify")
+    {
+        if (argc == 2)
+        {
+            std::cout << clr::yellow << "You must specify an ID after 'identify'";
+            std::exit(0);
+        }
+        else if (argc == 3)
+        {
+            std::filesystem::path nullpath{""};
+            std::cout << getNameFromAppID(std::stoul(argv[2]), nullpath);
+        }
     }
 
     if (argc == 1)
