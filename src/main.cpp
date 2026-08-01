@@ -185,7 +185,7 @@ int main(int argc, char* argv[])
         printHelp();
     }
 
-    if (std::string_view(argv[1]) == "identify")
+    if (argc >= 2 && std::string_view(argv[1]) == "identify")
     {
         if (argc == 2)
         {

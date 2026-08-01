@@ -1,5 +1,5 @@
 # Requirements
-- Yazi
+- Yazi (optional)
 - [Steam API key](https://steamcommunity.com/dev/apikey)
 
 # What is this?

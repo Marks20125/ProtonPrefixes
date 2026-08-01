@@ -95,13 +95,21 @@ std::string getNewName(std::string& gameName, std::filesystem::path& gamePath)
         printFolderContents(gamePath.string() + "/users/steamuser/" + folders[i]);
     }
 
-    std::cout << clr::white << "Game name? (If you couldn't identify it, type 'N', yazi will open: ";
+    std::cout << clr::white << "Game name? (If you couldn't identify it, type 'N', a file exporer will open): ";
     std::getline(std::cin, newGameName);
 
     if (newGameName == "N")
     {
-        std::string command{"yazi " + gamePath.string() + "/users/steamuser"};
-        system(command.c_str());
+        if (system("which yazi > /dev/null 2>&1") == 0)
+        {
+            std::string command{"yazi " + gamePath.string() + "/users/steamuser"};
+            system(command.c_str());
+        }
+        else
+        {
+            std::string command{"xdg-open " + gamePath.string() + "/users/steamuser"};
+            system(command.c_str());
+        }
 
         std::cout << clr::white << "Game name?: ";
         std::getline(std::cin, newGameName);
