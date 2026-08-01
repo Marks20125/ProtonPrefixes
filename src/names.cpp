@@ -100,16 +100,26 @@ std::string getNewName(std::string& gameName, std::filesystem::path& gamePath)
 
     if (newGameName == "N")
     {
-        if (system("which yazi > /dev/null 2>&1") == 0)
+        std::string command{};
+
+        if (jsonNames["yazi"] == "true")
         {
-            std::string command{"yazi " + gamePath.string() + "/users/steamuser"};
-            system(command.c_str());
+            if (system("which yazi > /dev/null 2>&1") == 0)
+            {
+                command = "yazi " + gamePath.string() + "/users/steamuser";
+            }
+            else
+            {
+                std::cout << clr::red << "You wanted to use Yazi, but you haven't installed it. Another file explorer will be used as a fallback\n";
+                command = "xdg-open " + gamePath.string() + "/users/steamuser";
+            }
         }
         else
         {
-            std::string command{"xdg-open " + gamePath.string() + "/users/steamuser"};
-            system(command.c_str());
+            command = "xdg-open " + gamePath.string() + "/users/steamuser";
         }
+
+        system(command.c_str());
 
         std::cout << clr::white << "Game name?: ";
         std::getline(std::cin, newGameName);

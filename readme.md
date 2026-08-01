@@ -1,5 +1,4 @@
 # Requirements
-- Yazi (optional)
 - [Steam API key](https://steamcommunity.com/dev/apikey)
 
 # What is this?
@@ -21,6 +20,7 @@ This is a tool to help you identify which proton prefix is which, using symlinks
 - API key: `./ProtonPrefixes setup api`
 - Creation path: `./ProtonPrefixes setup create`
 - Search paths: `./ProtonPrefixes setup paths`
+- Yazi usage: `./ProtonPrefixes setup yazi`
 ## Clean
 `./ProtonPrefixes clean`
 ## Identify

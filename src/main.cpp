@@ -66,6 +66,30 @@ void setup()
         }
     }
 
+    if (jsonData["yazi"].empty())
+    {
+        std::cout << clr::yellow << "Do you want to use Yazi to open folders? If you say no, the default explorer will be used (y/n): ";
+        std::string answer{""};
+        std::cin >> answer;
+
+        if (answer == "y" || answer == "yes")
+        {
+            if (system("which yazi > /dev/null 2>&1") != 0)
+            {
+                std::cout << clr::red << "Yazi is not installed. The option will be saved, but make sure to install it!\n";
+            }
+            std::string path{"/yazi"};
+            std::string value{"true"};
+            writeToJson(path, value);
+        }
+        else
+        {
+            std::string path{"/yazi"};
+            std::string value{"false"};
+            writeToJson(path, value);
+        }
+    }
+
     std::cout << clr::red << "Setup completed";
 }
 
@@ -101,7 +125,7 @@ void createSymlinks(std::filesystem::path& pfx, std::filesystem::path& create)
 
 void clean(std::filesystem::path& create)
 {
-    std::cout << clr::yellow << "Searching for symlinks for prefixes that no longer exist\n";
+    std::cout << clr::yellow << "Searching for prefixes that no longer exist\n";
 
     bool hasBeenFound{false};
 
@@ -145,6 +169,10 @@ int main(int argc, char* argv[])
         {
             jsonData.erase("searchPaths");
         }
+        else if (argc == 3 && std::string_view(argv[2]) == "yazi")
+        {
+            jsonData.erase("yazi");
+        }
 
         std::ofstream writeJsonFile{paths::jsonPath};
         writeJsonFile << jsonData.dump(4);
@@ -154,7 +182,7 @@ int main(int argc, char* argv[])
         std::exit(0);
     }
 
-    if (jsonData["searchPaths"].empty())
+    if (jsonData["yazi"].empty())
     {
         std::cout << clr::red << "Program is not configured. Run './ProtonPrefixes setup'";
         std::exit(0);
