@@ -12,7 +12,7 @@ void printSeparatorWithText(std::string text)
     std::cout << clr::cyan << "=====================[" << text << "]=====================" << '\n';
 }
 
-void printFolderContents(std::string folderPath)
+void printFolderContents(std::filesystem::path folderPath)
 {
     for (const auto& entry : std::filesystem::directory_iterator(folderPath))
     {

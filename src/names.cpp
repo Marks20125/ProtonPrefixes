@@ -92,7 +92,7 @@ std::string getNewName(std::string& gameName, std::filesystem::path& gamePath)
     for (int i = 0; i < folders.size(); ++i)
     {
         printSeparatorWithText(folders[i]);
-        printFolderContents(gamePath.string() + "/users/steamuser/" + folders[i]);
+        printFolderContents(gamePath / "users" / "steamuser" / folders[i]);
     }
 
     std::cout << clr::white << "Game name? (If you couldn't identify it, type 'N', a file exporer will open): ";
@@ -102,7 +102,7 @@ std::string getNewName(std::string& gameName, std::filesystem::path& gamePath)
     {
         std::string command{};
 
-        if (jsonNames["yazi"] == "true")
+        if (jsonNames["yazi"] == "true" && !jsonNames["yazi"].empty())
         {
             if (system("which yazi > /dev/null 2>&1") == 0)
             {

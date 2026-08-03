@@ -95,31 +95,33 @@ void setup()
 
 void createSymlinks(std::filesystem::path& pfx, std::filesystem::path& create)
 {
-    if (std::filesystem::exists(pfx) && std::filesystem::is_directory(pfx))
+    if (!std::filesystem::exists(pfx) && !std::filesystem::is_directory(pfx))
     {
-        for (const auto& entry : std::filesystem::directory_iterator(pfx))
+        return;
+    }
+
+    for (const auto& entry : std::filesystem::directory_iterator(pfx))
+    {
+        std::cout << clr::white << "Processing " << entry.path().filename().string() << '\n';
+        std::filesystem::path gamePath{entry.path() / "pfx" / "drive_c"};
+        std::string gameName{getNameFromAppID(stoul(entry.path().filename().string()), gamePath)};
+        std::filesystem::path symlinkPath{create / gameName};
+
+        if (gameName != "invalid" && !std::filesystem::exists(symlinkPath))
         {
-            std::cout << clr::white << "Processing " << entry.path().filename().string() << '\n';
-            std::filesystem::path gamePath{entry.path().string() + "/pfx/drive_c"};
-            std::string gameName{getNameFromAppID(stoul(entry.path().filename().string()), gamePath)};
-            std::filesystem::path symlinkPath{create.string() + "/" + gameName};
-
-            if (gameName != "invalid" && !std::filesystem::exists(symlinkPath))
-            {
-                std::filesystem::create_directory_symlink(gamePath, symlinkPath);
-                std::cout << clr::green << "Created folder for " << gameName << '\n';
-            }
-            else if (gameName != "invalid")
-            {
-                std::cout << clr::white << "Folder for this game already exists\n";
-            }
-            else
-            {
-                std::cout << clr::red << "This is not a game, it's probably a Proton version\n";
-            }
-
-            std::cout << '\n';
+            std::filesystem::create_directory_symlink(gamePath, symlinkPath);
+            std::cout << clr::green << "Created folder for " << gameName << '\n';
         }
+        else if (gameName != "invalid")
+        {
+            std::cout << clr::white << "Folder for this game already exists\n";
+        }
+        else
+        {
+            std::cout << clr::red << "This is not a game, it's probably a Proton version\n";
+        }
+
+        std::cout << '\n';
     }
 }
 
