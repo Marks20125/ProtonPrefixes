@@ -16,4 +16,6 @@ add_executable(ProtonPrefixes
         src/names.cpp
         src/names.h)
 
-target_link_libraries(ProtonPrefixes PRIVATE cpr::cpr nlohmann_json::nlohmann_json)
+target_link_libraries(ProtonPrefixes PRIVATE 
+        cpr::cpr 
+        nlohmann_json::nlohmann_json)

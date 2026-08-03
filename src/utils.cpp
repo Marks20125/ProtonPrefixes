@@ -43,9 +43,10 @@ void writeToJson(std::string& path, std::string& value)
 void printHelp()
 {
     std::cout << "Parameters available for use: \n";
+    std::cout << '\n';
     std::cout << clr::green << "run: " << clr::white << "Reads existing proton prefixes and creates symlinks for them\n";
     std::cout << '\n';
-    std::cout << clr::green << "setup: " << clr::white << "By itself, it manages initial configuration. It the program has already been configured, running it again won't do anything. If you want to change a certain setting, you can run 'setup api', 'setup create' or 'setup paths'\n";
+    std::cout << clr::green << "setup: " << clr::white << "By itself, it manages initial configuration. If the program has already been configured, running it again won't do anything. If you want to change a certain setting, you can run 'setup api', 'setup create', 'setup paths' or 'setup yazi'\n";
     std::cout << '\n';
     std::cout << clr::green << "clean: " << clr::white << "Scans the symlink folder for any entry that points to a no longer existing prefix\n";
     std::cout << '\n';
