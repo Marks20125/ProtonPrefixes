@@ -7,6 +7,7 @@ set(CPR_USE_SYSTEM_CURL ON)
 
 add_subdirectory(external/json)
 add_subdirectory(external/cpr)
+add_subdirectory(external/ValveFileVDF)
 
 add_executable(ProtonPrefixes
         src/main.cpp
@@ -20,4 +21,5 @@ add_executable(ProtonPrefixes
 
 target_link_libraries(ProtonPrefixes PRIVATE 
         cpr::cpr 
-        nlohmann_json::nlohmann_json)
+        nlohmann_json::nlohmann_json
+        ValveFileVDF::ValveFileVDF)

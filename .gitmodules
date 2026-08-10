@@ -4,3 +4,6 @@
 [submodule "external/cpr"]
 	path = external/cpr
 	url = https://github.com/libcpr/cpr.git
+[submodule "external/ValveFileVDF"]
+	path = external/ValveFileVDF
+	url = https://github.com/TinyTinni/ValveFileVDF.git
