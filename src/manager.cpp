@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <vdf_parser.hpp>
 
 void manager()
 {
@@ -16,7 +17,6 @@ void manager()
 
     std::filesystem::path create{jsonNames["create"]};
 
-    // Put all game names into a vector
     std::vector<std::filesystem::directory_entry> games;
     for (const auto& entry : std::filesystem::directory_iterator(create))
     {
@@ -29,7 +29,6 @@ void manager()
         std::exit(0);
     }
 
-    // Print the names with an associated number
     for (int i = 0; i < games.size(); ++i)
     {
         std::cout << clr::green << (i + 1) << clr::gray << ". " << games[i].path().filename().string() << '\n';
@@ -49,5 +48,21 @@ void manager()
         std::cout << clr::red << "Selection outside of range";
     }
 
-    std::cout << "Corresponding AppID is " << getAppIDFromName(selectedGameName);
+    // root -> Software -> Valve -> Steam -> apps -> ID -> LaunchOptions
+
+    std::string appID = getAppIDFromName(selectedGameName);
+    std::ifstream readVDF{paths::vdfPath};
+    auto root = tyti::vdf::read(readVDF);
+
+    auto paramPath = root.childs["Software"]->childs["Valve"]->childs["Steam"]->childs["apps"]->childs[appID];
+
+    if (paramPath->attribs.count("LaunchOptions"))
+    {
+        std::string launchParameters{paramPath->attribs["LaunchOptions"]};
+        std::cout << launchParameters;
+    }
+    else
+    {
+        std::cout << clr::red << "Program has no launch parameters";
+    }
 }

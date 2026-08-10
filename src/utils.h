@@ -8,6 +8,7 @@ void printHelp();
 
 namespace paths
 {
-extern std::string homeDir;
+extern std::filesystem::path homeDir;
 extern std::filesystem::path jsonPath;
+extern std::filesystem::path vdfPath;
 } // namespace paths

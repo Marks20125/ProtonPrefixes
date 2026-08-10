@@ -30,7 +30,7 @@ void setup()
                   << "Example: /home/<user>/.compatdata\n"
                   << ">";
 
-        std::string create{""};
+        std::string create;
         std::cin >> create;
 
         if (!std::filesystem::exists(create))
@@ -70,7 +70,7 @@ void setup()
     if (jsonData["yazi"].empty())
     {
         std::cout << clr::yellow << "Do you want to use Yazi to open folders? If you say no, the default explorer will be used (y/n): ";
-        std::string answer{""};
+        std::string answer;
         std::cin >> answer;
 
         if (answer == "y" || answer == "yes")

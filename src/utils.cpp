@@ -55,6 +55,7 @@ void printHelp()
 
 namespace paths
 {
-std::string homeDir{std::getenv("HOME")};
-std::filesystem::path jsonPath{homeDir + "/.config/ProtonPrefixes.json"};
+std::filesystem::path homeDir{std::getenv("HOME")};
+std::filesystem::path jsonPath{homeDir / ".config" / "ProtonPrefixes.json"};
+std::filesystem::path vdfPath{homeDir / ".steam" / "steam" / "userdata" / "1306518655" / "config" / "localconfig.vdf"}; // TODO: Detect user folders and use steam API to let user select name
 } // namespace paths
