@@ -14,7 +14,9 @@ add_executable(ProtonPrefixes
         src/utils.cpp
         src/utils.h
         src/names.cpp
-        src/names.h)
+        src/names.h
+        src/manager.cpp
+        src/manager.h)
 
 target_link_libraries(ProtonPrefixes PRIVATE 
         cpr::cpr 

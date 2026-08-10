@@ -14,8 +14,8 @@ std::string getNameFromAppID(unsigned long appID, std::filesystem::path& gamePat
     std::string url{"https://api.steampowered.com/IStoreService/GetAppList/v1/"};
     std::string appName{};
 
-    std::ifstream jsonFile{paths::jsonPath};
-    auto jsonNames = nlohmann::json::parse(jsonFile);
+    std::ifstream readJsonFile{paths::jsonPath};
+    auto jsonNames = nlohmann::json::parse(readJsonFile);
     apiKey = jsonNames["api"];
     std::string appIDstr{std::to_string(appID)};
 
@@ -127,4 +127,19 @@ std::string getNewName(std::string& gameName, std::filesystem::path& gamePath)
         return newGameName;
     }
     return newGameName;
+}
+
+std::string getAppIDFromName(std::string& name)
+{
+    std::ifstream readJsonFile{paths::jsonPath};
+    auto jsonNames = nlohmann::json::parse(readJsonFile);
+
+    for (const auto& [key, value] : jsonNames.items())
+    {
+        if (value.contains("name") && value["name"] == name)
+        {
+            return key;
+        }
+    }
+    return "";
 }
