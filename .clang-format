@@ -4,3 +4,4 @@ ColumnLimit: 0
 BreakBeforeBraces: Allman
 PointerAlignment: Left
 IncludeBlocks: Regroup
+AlignAfterOpenBracket: BlockIndent

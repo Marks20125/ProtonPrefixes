@@ -38,7 +38,8 @@ std::string getNameFromAppID(unsigned long appID, std::filesystem::path& gamePat
             {"last_appid", std::to_string(appID - 1)},
             {"max_results", "1"},
             {"include_software", "true"},
-        });
+        }
+    );
 
     if (response.status_code == 200)
     {
@@ -142,4 +143,33 @@ std::string getAppIDFromName(std::string& name)
         }
     }
     return "";
+}
+
+std::string getNameFromAccountID(std::string ID32)
+{
+    std::string apiKey{""};
+    std::string url{"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/"};
+    std::string accountName{};
+
+    std::string ID64{std::to_string(std::stoi(ID32) + 76561197960265728)};
+
+    std::ifstream readJsonFile{paths::jsonPath};
+    auto jsonNames = nlohmann::json::parse(readJsonFile);
+    apiKey = jsonNames["api"];
+
+    auto response = cpr::Get(
+        cpr::Url{url},
+        cpr::Parameters{
+            {"key", apiKey},
+            {"steamids", ID64},
+        }
+    );
+
+    if (response.status_code == 200)
+    {
+        auto jsonResponse = nlohmann::json::parse(response.text);
+        return jsonResponse["response"]["players"][0]["personaname"];
+    }
+
+    return ID32;
 }

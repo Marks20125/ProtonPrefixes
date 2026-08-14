@@ -48,21 +48,34 @@ void manager()
         std::cout << clr::red << "Selection outside of range";
     }
 
-    // root -> Software -> Valve -> Steam -> apps -> ID -> LaunchOptions
-
     std::string appID = getAppIDFromName(selectedGameName);
-    std::ifstream readVDF{paths::vdfPath};
+    std::ifstream readVDF{paths::getVDFPath()};
     auto root = tyti::vdf::read(readVDF);
 
     auto paramPath = root.childs["Software"]->childs["Valve"]->childs["Steam"]->childs["apps"]->childs[appID];
 
+    std::string launchParameters;
+    std::string newLaunchParameters;
     if (paramPath->attribs.count("LaunchOptions"))
     {
-        std::string launchParameters{paramPath->attribs["LaunchOptions"]};
-        std::cout << launchParameters;
+        launchParameters = paramPath->attribs["LaunchOptions"];
     }
     else
     {
-        std::cout << clr::red << "Program has no launch parameters";
+        launchParameters = "";
     }
+
+    std::ofstream writeTempFile{paths::tempPath};
+    writeTempFile << launchParameters;
+    writeTempFile.close();
+
+    std::string command{"xdg-open " + paths::tempPath.string()};
+    system(command.c_str());
+
+    continuePrompt("Press enter to continue. Make sure steam is closed as it will overwrite the parameters otherwise");
+
+    std::ifstream readTempFile(paths::tempPath);
+    std::getline(readTempFile, newLaunchParameters);
+
+    // TODO: Write newLaunchParameters to localconfig.vdf
 }

@@ -1,6 +1,7 @@
 #include "utils.h"
 
 #include "colored-cout.h"
+#include "names.h"
 
 #include <filesystem>
 #include <fstream>
@@ -53,9 +54,69 @@ void printHelp()
     std::cout << clr::green << "identify: " << clr::white << "If followed by an ID, it prints the game name\n";
 }
 
+void clearCin()
+{
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+void continuePrompt(std::string message = "")
+{
+
+    std::cout << clr::yellow << message;
+    clearCin();
+    std::cin.get();
+}
+
 namespace paths
 {
 std::filesystem::path homeDir{std::getenv("HOME")};
 std::filesystem::path jsonPath{homeDir / ".config" / "ProtonPrefixes.json"};
-std::filesystem::path vdfPath{homeDir / ".steam" / "steam" / "userdata" / "1306518655" / "config" / "localconfig.vdf"}; // TODO: Detect user folders and use steam API to let user select name
+std::filesystem::path tempPath{homeDir / ".config" / "ProtonPrefixesTemp.txt"};
+
+std::filesystem::path getVDFPath()
+{
+    std::filesystem::path userData{homeDir / ".steam" / "steam" / "userdata"};
+    std::filesystem::path vdfPath;
+
+    std::vector<std::filesystem::directory_entry> IDs;
+    for (const auto& entry : std::filesystem::directory_iterator(userData))
+    {
+        if (entry.path().filename().string() != "0")
+        {
+            IDs.push_back(entry);
+        }
+    }
+
+    if (IDs.size() == 1)
+    {
+        vdfPath = userData / IDs[0].path().filename().string() / "config" / "localconfig.vdf";
+    }
+    else
+    {
+        std::cout << '\n';
+        for (int i = 0; i < IDs.size(); ++i)
+        {
+            std::cout << clr::green << (i + 1) << clr::gray << ". " << getNameFromAccountID(IDs[i].path().filename().string()) << '\n';
+        }
+
+        std::cout << "Select a user (Steam stores launch parameters on different folders for each user): ";
+        int selection{};
+        std::cin >> selection;
+
+        std::string selectedID{};
+        if (selection >= 1 && selection <= IDs.size())
+        {
+            selectedID = IDs[selection - 1].path().filename().string();
+        }
+        else
+        {
+            std::cout << clr::red << "Selection outside of range";
+        }
+
+        vdfPath = userData / selectedID / "config" / "localconfig.vdf";
+    }
+
+    return vdfPath;
+}
+
 } // namespace paths
