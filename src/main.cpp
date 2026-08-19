@@ -1,6 +1,7 @@
 #include "colored-cout.h"
 #include "manager.h"
 #include "names.h"
+#include "parameters.h"
 #include "utils.h"
 
 #include <filesystem>
@@ -228,6 +229,11 @@ int main(int argc, char* argv[])
             std::filesystem::path nullpath{""};
             std::cout << getNameFromAppID(std::stoul(argv[2]), nullpath);
         }
+    }
+
+    if (argc == 2 && std::string_view(argv[1]) == "parameters")
+    {
+        parameters();
     }
 
     if (argc == 2 && std::string_view(argv[1]) == "manager")

@@ -16,6 +16,8 @@ add_executable(ProtonPrefixes
         src/utils.h
         src/names.cpp
         src/names.h
+        src/parameters.cpp
+        src/parameters.h
         src/manager.cpp
         src/manager.h)
 

@@ -52,6 +52,8 @@ void printHelp()
     std::cout << clr::green << "clean: " << clr::white << "Scans the symlink folder for any entry that points to a no longer existing prefix\n";
     std::cout << '\n';
     std::cout << clr::green << "identify: " << clr::white << "If followed by an ID, it prints the game name\n";
+    std::cout << '\n';
+    std::cout << clr::green << "manager: " << clr::white << "Perform various actions related to a prefix, such as deleting it, or remove everything except the saves\n";
 }
 
 void clearCin()

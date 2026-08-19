@@ -173,3 +173,44 @@ std::string getNameFromAccountID(std::string ID32)
 
     return ID32;
 }
+
+std::string selectProcessedPrefix()
+{
+    std::ifstream readJsonFile{paths::jsonPath};
+    auto jsonNames = nlohmann::json::parse(readJsonFile);
+
+    std::filesystem::path create{jsonNames["create"]};
+
+    std::vector<std::filesystem::directory_entry> games;
+    for (const auto& entry : std::filesystem::directory_iterator(create))
+    {
+        games.push_back(entry);
+    }
+
+    if (games.empty())
+    {
+        std::cout << clr::red << "Before using the manager run the program with './ProtonPrefixes run'";
+        std::exit(0);
+    }
+
+    for (int i = 0; i < games.size(); ++i)
+    {
+        std::cout << clr::green << (i + 1) << clr::gray << ". " << games[i].path().filename().string() << '\n';
+    }
+
+    std::cout << "Select a number: ";
+    int selection{};
+    std::cin >> selection;
+
+    std::string selectedGameName{};
+    if (selection >= 1 && selection <= games.size())
+    {
+        selectedGameName = games[selection - 1].path().filename().string();
+    }
+    else
+    {
+        std::cout << clr::red << "Selection outside of range";
+    }
+
+    return selectedGameName;
+}
