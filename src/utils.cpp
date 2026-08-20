@@ -13,7 +13,7 @@ void printSeparatorWithText(std::string text)
     std::cout << clr::cyan << "=====================[" << text << "]=====================" << '\n';
 }
 
-void printFolderContents(std::filesystem::path folderPath)
+void printFolderContents(const std::filesystem::path& folderPath)
 {
     if (!std::filesystem::exists(folderPath))
     {
@@ -67,7 +67,7 @@ void clearCin()
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-void continuePrompt(std::string message = "")
+void continuePrompt(const std::string& message = "")
 {
 
     std::cout << clr::yellow << message;
@@ -75,7 +75,7 @@ void continuePrompt(std::string message = "")
     std::cin.get();
 }
 
-void clean(std::filesystem::path& create)
+void clean(const std::filesystem::path& create)
 {
     std::cout << clr::yellow << "Searching for prefixes that no longer exist\n";
 

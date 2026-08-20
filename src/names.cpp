@@ -10,7 +10,7 @@
 
 std::string getNameFromAppID(unsigned long appID, std::filesystem::path& gamePath)
 {
-    std::string apiKey{""};
+    std::string apiKey{};
     std::string url{"https://api.steampowered.com/IStoreService/GetAppList/v1/"};
     std::string appName{};
 
@@ -19,7 +19,7 @@ std::string getNameFromAppID(unsigned long appID, std::filesystem::path& gamePat
     apiKey = jsonNames["api"];
     std::string appIDstr{std::to_string(appID)};
 
-    if (!jsonNames[appIDstr]["name"].empty() && gamePath.string() != "")
+    if (!jsonNames[appIDstr]["name"].empty() && !gamePath.string().empty())
     {
         std::cout << clr::yellow << appIDstr << " is already on json file as " << jsonNames[appIDstr]["name"] << '\n';
         return jsonNames[appIDstr]["name"];
@@ -64,7 +64,7 @@ std::string getNameFromAppID(unsigned long appID, std::filesystem::path& gamePat
         }
         else // This ID can't correspond to any steam game
         {
-            if (gamePath.string() == "")
+            if (gamePath.string().empty())
             {
                 appName = "This game is not on Steam";
                 return appName;
@@ -134,7 +134,7 @@ std::string getNewName(std::string& gameName, std::filesystem::path& gamePath)
     return newGameName;
 }
 
-std::string getAppIDFromName(std::string& name)
+std::string getAppIDFromName(const std::string& name)
 {
     std::ifstream readJsonFile{paths::jsonPath};
     auto jsonNames = nlohmann::json::parse(readJsonFile);
@@ -151,7 +151,7 @@ std::string getAppIDFromName(std::string& name)
 
 std::string getNameFromAccountID(std::string ID32)
 {
-    std::string apiKey{""};
+    std::string apiKey{};
     std::string url{"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/"};
     std::string accountName{};
 

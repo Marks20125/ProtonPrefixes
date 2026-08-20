@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 4.2)
 project(ProtonPrefixes)
 
 set(CMAKE_CXX_STANDARD 26)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CPR_USE_SYSTEM_CURL ON)
 
 add_subdirectory(external/json)

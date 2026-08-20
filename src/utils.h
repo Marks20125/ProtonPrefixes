@@ -2,12 +2,12 @@
 #include <string>
 
 void printSeparatorWithText(std::string text);
-void printFolderContents(std::filesystem::path folderPath);
+void printFolderContents(const std::filesystem::path& folderPath);
 void writeToJson(const std::string& path, const std::string& value);
 void printHelp();
 void clearCin();
-void continuePrompt(std::string message);
-void clean(std::filesystem::path& create);
+void continuePrompt(const std::string& message);
+void clean(const std::filesystem::path& create);
 
 namespace paths
 {

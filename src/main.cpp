@@ -89,7 +89,7 @@ void setup()
     std::cout << clr::red << "Setup completed";
 }
 
-void createSymlinks(std::filesystem::path& pfx, std::filesystem::path& create)
+void createSymlinks(const std::filesystem::path& pfx, const std::filesystem::path& create)
 {
     if (!std::filesystem::exists(pfx) && !std::filesystem::is_directory(pfx))
     {
