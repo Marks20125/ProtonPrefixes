@@ -20,8 +20,7 @@ void setup()
         std::cout << clr::yellow << "Enter your Steam API key: ";
         std::string key{};
         std::cin >> key;
-        std::string path{"/api"};
-        writeToJson(path, key);
+        writeToJson("/api", key);
         std::cout << '\n';
     }
 
@@ -39,14 +38,13 @@ void setup()
             std::filesystem::create_directory(create);
         }
 
-        std::string path{"/create"};
-        writeToJson(path, create);
+        writeToJson("/create", create);
         std::cout << '\n';
     }
 
     if (jsonData["searchPaths"].empty())
     {
-        std::cout << clr::yellow << "Enter the paths to search for prefixes. They MUST be absolute paths.\n"
+        std::cout << clr::yellow << "Enter the paths to search for prefixes. They MUST be absolute paths\n"
                   << "Example: /home/<user>/.steam/steam/steamapps/compatdata\n"
                   << clr::red << "Type 'Done' when you're done\n";
 
@@ -80,15 +78,11 @@ void setup()
             {
                 std::cout << clr::red << "Yazi is not installed. The option will be saved, but make sure to install it!\n";
             }
-            std::string path{"/yazi"};
-            std::string value{"true"};
-            writeToJson(path, value);
+            writeToJson("/yazi", "true");
         }
         else
         {
-            std::string path{"/yazi"};
-            std::string value{"false"};
-            writeToJson(path, value);
+            writeToJson("/yazi", "false");
         }
     }
 
@@ -124,27 +118,6 @@ void createSymlinks(std::filesystem::path& pfx, std::filesystem::path& create)
         }
 
         std::cout << '\n';
-    }
-}
-
-void clean(std::filesystem::path& create)
-{
-    std::cout << clr::yellow << "Searching for prefixes that no longer exist\n";
-
-    bool hasBeenFound{false};
-
-    for (const auto& entry : std::filesystem::directory_iterator(create))
-    {
-        if (!std::filesystem::exists(std::filesystem::read_symlink(entry)))
-        {
-            hasBeenFound = true;
-            std::cout << clr::red << entry.path().filename().string() << " prefix doesn't exist anymore, deleting folder\n";
-            std::filesystem::remove(entry.path());
-        }
-    }
-    if (hasBeenFound == false)
-    {
-        std::cout << clr::green << "No folders were deleted\n";
     }
 }
 

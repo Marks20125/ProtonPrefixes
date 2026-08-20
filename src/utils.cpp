@@ -15,13 +15,19 @@ void printSeparatorWithText(std::string text)
 
 void printFolderContents(std::filesystem::path folderPath)
 {
+    if (!std::filesystem::exists(folderPath))
+    {
+        std::cout << clr::red << "Folder does not exist\n";
+        return;
+    }
+
     for (const auto& entry : std::filesystem::directory_iterator(folderPath))
     {
         std::cout << clr::blue << entry.path().filename().string() << '\n';
     }
 }
 
-void writeToJson(std::string& path, std::string& value)
+void writeToJson(const std::string& path, const std::string& value)
 {
     nlohmann::json temp;
 
@@ -67,6 +73,27 @@ void continuePrompt(std::string message = "")
     std::cout << clr::yellow << message;
     clearCin();
     std::cin.get();
+}
+
+void clean(std::filesystem::path& create)
+{
+    std::cout << clr::yellow << "Searching for prefixes that no longer exist\n";
+
+    bool hasBeenFound{false};
+
+    for (const auto& entry : std::filesystem::directory_iterator(create))
+    {
+        if (!std::filesystem::exists(std::filesystem::read_symlink(entry)))
+        {
+            hasBeenFound = true;
+            std::cout << clr::red << entry.path().filename().string() << " prefix doesn't exist anymore, deleting folder\n";
+            std::filesystem::remove(entry.path());
+        }
+    }
+    if (hasBeenFound == false)
+    {
+        std::cout << clr::green << "No folders were deleted\n";
+    }
 }
 
 namespace paths

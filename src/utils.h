@@ -3,10 +3,11 @@
 
 void printSeparatorWithText(std::string text);
 void printFolderContents(std::filesystem::path folderPath);
-void writeToJson(std::string& path, std::string& value);
+void writeToJson(const std::string& path, const std::string& value);
 void printHelp();
 void clearCin();
 void continuePrompt(std::string message);
+void clean(std::filesystem::path& create);
 
 namespace paths
 {
