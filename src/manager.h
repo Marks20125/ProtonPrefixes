@@ -1,1 +1,6 @@
+#ifndef PROTONPREFIXES_MANAGER_H
+#define PROTONPREFIXES_MANAGER_H
+
 void manager();
+
+#endif // PROTONPREFIXES_MANAGER_H

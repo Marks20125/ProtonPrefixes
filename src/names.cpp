@@ -72,6 +72,10 @@ std::string getNameFromAppID(unsigned long appID, std::filesystem::path& gamePat
             appName = getNewName(appIDstr, gamePath);
             std::string path{"/" + appIDstr + "/name"};
             writeToJson(path, appName);
+
+            path = "/" + appIDstr + "/pfx";
+            std::string pfx{gamePath.parent_path().parent_path()};
+            writeToJson(path, pfx);
         }
     }
 

@@ -14,7 +14,7 @@ void manager()
     std::string selectedGameID{getAppIDFromName(selectedGameName)};
 
     std::cout << clr::green << "0. " << clr::gray << "Delete prefix\n";
-    std::cout << clr::green << "1. " << clr::gray << "Run winecfg (requires protontricks)\n";
+    std::cout << clr::green << "1. " << clr::gray << "Shrink prefix\n";
 
     std::cout << "Select an option: ";
     int option;
@@ -27,6 +27,7 @@ void manager()
     {
     case 0:
     {
+        std::cout << '\n';
         std::cout << clr::red << "Are you sure you want to delete the prefix? (yes/no): ";
         std::string response;
         std::cin >> response;
@@ -41,7 +42,7 @@ void manager()
         break;
     }
     case 1:
-        // RUN WINECFG
+        // SHRINK PREFIX
         break;
     }
 }

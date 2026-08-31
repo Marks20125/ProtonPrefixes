@@ -1,3 +1,6 @@
+#ifndef PROTONPREFIXES_NAMES_H
+#define PROTONPREFIXES_NAMES_H
+
 #include <filesystem>
 #include <string>
 
@@ -6,3 +9,5 @@ std::string getNewName(std::string& gameName, std::filesystem::path& gamePath);
 std::string getAppIDFromName(const std::string& name);
 std::string getNameFromAccountID(std::string ID32);
 std::string selectProcessedPrefix();
+
+#endif // PROTONPREFIXES_NAMES_H

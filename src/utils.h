@@ -1,3 +1,6 @@
+#ifndef PROTONPREFIXES_UTILS_H
+#define PROTONPREFIXES_UTILS_H
+
 #include <filesystem>
 #include <string>
 
@@ -17,4 +20,6 @@ extern std::filesystem::path vdfPath;
 extern std::filesystem::path tempPath;
 
 std::filesystem::path getVDFPath();
-} // namespace paths
+}
+
+#endif // PROTONPREFIXES_UTILS_H
