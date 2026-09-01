@@ -26,9 +26,7 @@ void setup()
 
     if (jsonData["create"].empty())
     {
-        std::cout << clr::yellow << "Enter a path to save the symlinks. It MUST be an absolute path\n"
-                  << "Example: /home/<user>/.compatdata\n"
-                  << ">";
+        std::cout << clr::yellow << "Enter a path to save the symlinks. It MUST be an absolute path\n" << "Example: /home/<user>/.compatdata\n" << ">";
 
         std::string create;
         std::cin >> create;
@@ -44,9 +42,7 @@ void setup()
 
     if (jsonData["searchPaths"].empty())
     {
-        std::cout << clr::yellow << "Enter the paths to search for prefixes. They MUST be absolute paths\n"
-                  << "Example: /home/<user>/.steam/steam/steamapps/compatdata\n"
-                  << clr::red << "Type 'Done' when you're done\n";
+        std::cout << clr::yellow << "Enter the paths to search for prefixes. They MUST be absolute paths\n" << "Example: /home/<user>/.steam/steam/steamapps/compatdata\n" << clr::red << "Type 'Done' when you're done\n";
 
         for (int i = 1; i < 10000; i++)
         {

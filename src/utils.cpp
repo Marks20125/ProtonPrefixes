@@ -59,7 +59,9 @@ void printHelp()
     std::cout << '\n';
     std::cout << clr::green << "identify: " << clr::white << "If followed by an ID, it prints the game name\n";
     std::cout << '\n';
-    std::cout << clr::green << "manager: " << clr::white << "Perform various actions related to a prefix, such as deleting it, or remove everything except the saves\n";
+    std::cout << clr::green << "manager: " << clr::white << "Perform various actions related to a prefix, such as deleting or shrinking it\n";
+    std::cout << '\n';
+    std::cout << clr::green << "parameters: " << clr::white << "Change a game's steam parameters\n";
 }
 
 void clearCin()

@@ -19,7 +19,7 @@ void parameters()
 
     std::string launchParameters;
     std::string newLaunchParameters;
-    if (paramPath->attribs.count("LaunchOptions"))
+    if (paramPath->attribs.contains("LaunchOptions"))
     {
         launchParameters = paramPath->attribs["LaunchOptions"];
     }
@@ -40,5 +40,5 @@ void parameters()
     std::ifstream readTempFile(paths::tempPath);
     std::getline(readTempFile, newLaunchParameters);
 
-    // TODO: Write newLaunchParameters to localconfig.vdf
+    //TODO: Write newLaunchParameters to localconfig.vdf
 }
