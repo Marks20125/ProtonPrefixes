@@ -37,7 +37,7 @@ void parameters()
     std::string command{"xdg-open " + paths::tempPath.string()};
     system(command.c_str());
 
-    continuePrompt("Press enter to continue. Make sure steam is closed as it will overwrite the parameters otherwise");
+    continuePrompt("Press enter to continue. Make sure Steam is closed as it will overwrite the parameters otherwise");
 
     std::ifstream readTempFile(paths::tempPath);
     std::getline(readTempFile, newLaunchParameters);

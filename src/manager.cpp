@@ -13,8 +13,8 @@ void manager()
     std::string selectedGameName{selectProcessedPrefix()};
     std::string selectedGameID{getAppIDFromName(selectedGameName)};
 
-    std::cout << clr::green << "0. " << clr::gray << "Delete prefix\n";
-    std::cout << clr::green << "1. " << clr::gray << "Shrink prefix\n";
+    std::cout << clr::green << "1. " << clr::gray << "Delete prefix\n";
+    std::cout << clr::green << "2. " << clr::gray << "Shrink prefix\n";
 
     std::cout << "Select an option: ";
     int option;
@@ -25,10 +25,10 @@ void manager()
 
     switch (option)
     {
-    case 0:
+    case 1:
     {
         std::cout << '\n';
-        std::cout << clr::red << "Are you sure you want to delete the prefix? (yes/no): ";
+        std::cout << clr::red << "Are you sure you want to delete the prefix? THIS ACTION IS IRREVERSIBLE (yes/no): ";
         std::string response;
         std::cin >> response;
         if (response == "yes")
@@ -41,8 +41,13 @@ void manager()
         }
         break;
     }
-    case 1:
+    case 2:
+        std::cout << clr::red << "Option not ready yet!";
         //TODO: Write shrink prefix function
+        break;
+
+    default:
+        std::cout << clr::red << "Select a valid option";
         break;
     }
 }
