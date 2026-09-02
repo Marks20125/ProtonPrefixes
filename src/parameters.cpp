@@ -1,10 +1,12 @@
 #include "parameters.h"
 
+#include "colored-cout.h"
 #include "names.h"
 #include "utils.h"
 
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <nlohmann/json.hpp>
 #include <vdf_parser.hpp>
 
@@ -40,5 +42,10 @@ void parameters()
     std::ifstream readTempFile(paths::tempPath);
     std::getline(readTempFile, newLaunchParameters);
 
-    //TODO: Write newLaunchParameters to localconfig.vdf
+    paramPath->attribs["LaunchOptions"] = newLaunchParameters;
+
+    std::ofstream writeVDF{paths::getVDFPath()};
+    tyti::vdf::write(writeVDF, root);
+    std::cout << clr::green << "Parameters updated";
+    writeVDF.close();
 }

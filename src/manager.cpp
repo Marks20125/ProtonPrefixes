@@ -42,7 +42,7 @@ void manager()
         break;
     }
     case 1:
-        // SHRINK PREFIX
+        //TODO: Write shrink prefix function
         break;
     }
 }
