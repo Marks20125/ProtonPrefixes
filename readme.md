@@ -25,6 +25,11 @@ This is a tool to help you identify which proton prefix is which, using symlinks
 `./ProtonPrefixes clean`
 ## Identify
 `./ProtonPrefixes identify <ID>`
+## Parameters
+`./ProtonPrefixes parameters`
+
+## Manager
+'./ProtonPrefixes manager'
 
 # Building
 ## Requirements
