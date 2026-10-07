@@ -44,21 +44,27 @@ void setup()
     {
         std::cout << clr::yellow << "Enter the paths to search for prefixes. They MUST be absolute paths\n" << "Example: /home/<user>/.steam/steam/steamapps/compatdata\n" << clr::red << "Type 'Done' when you're done\n";
 
-        for (int i = 1; i < 10000; i++)
+        std::string path{""};
+        int i = 1;
+        while (path != "Done")
         {
-            std::string path{""};
             std::cout << clr::yellow << ">";
             std::cin >> path;
 
-            if (path != "Done")
-            {
-                std::string jsonPath{"/searchPaths/path" + std::to_string(i)};
-                writeToJson(jsonPath, path);
-            }
-            else
+            if (path == "Done")
             {
                 break;
             }
+
+            if (!std::filesystem::exists(path))
+            {
+                std::cout << clr::red << "Path doesn't exist, try again\n";
+            }
+
+            std::string jsonPath{"/searchPaths/path" + std::to_string(i)};
+            writeToJson(jsonPath, path);
+
+            i++;
         }
     }
 
