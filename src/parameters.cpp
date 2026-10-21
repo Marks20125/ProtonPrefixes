@@ -9,6 +9,37 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <vdf_parser.hpp>
+#include <vector>
+
+std::vector<int> searchForNumbersInString(const std::string& str)
+{
+    std::vector<int> nums {};
+
+    std::istringstream ss {str};
+    int number;
+
+    while (ss >> number)
+    {
+        nums.push_back(number);
+    }
+
+    return nums;
+}
+
+std::vector<std::string> searchForTextInString(const std::string& str)
+{
+    std::vector<std::string> texts {};
+
+    std::istringstream ss {str};
+    std::string text;
+
+    while (ss >> text)
+    {
+        texts.push_back(text);
+    }
+
+    return texts;
+}
 
 void parameters()
 {
@@ -30,17 +61,55 @@ void parameters()
         launchParameters = "";
     }
 
-    std::ofstream writeTempFile{paths::tempPath};
-    writeTempFile << launchParameters;
-    writeTempFile.close();
+    std::vector<std::string> params {"DLL Overrides", "mangohud "};
+    std::cout << "Available launch parameters:\n";
 
-    std::string command{"xdg-open " + paths::tempPath.string()};
-    system(command.c_str());
+    for (int i = 0; i < params.size(); i++)
+    {
+        std::cout << clr::green << i+1 << clr::gray <<". " << params[i] << "\n";
+    }
+
+    clearCin();
+    std::cout << "Enter the ones you want separated by a space: ";
+    std::string selections {};
+    std::getline(std::cin, selections);
+
+    std::vector<int> paramNums {searchForNumbersInString(selections)};
+
+    for (int i = 0; i < paramNums.size(); i++)
+    {
+        std::string selectedParam {params[paramNums[i] - 1]};
+
+        if (selectedParam == "DLL Overrides")
+        {
+            std::cout << "What DLLs do you want to override?: ";
+            std::string dllsStr {};
+            std::getline(std::cin, dllsStr);
+            std::vector<std::string> dlls {searchForTextInString(dllsStr)};
+
+            selectedParam = "WINEDLLOVERRIDES=\"";
+
+            for (int i = 0; i < dlls.size(); i++)
+            {
+                if (i == dlls.size() - 1)
+                {
+                    selectedParam += dlls[i];
+                }
+                else
+                {
+                    selectedParam += dlls[i] + ",";
+                }
+            }
+
+            selectedParam += "=n,b\" ";
+        }
+
+        newLaunchParameters += selectedParam;
+    }
+
+    newLaunchParameters += "%command%";
 
     continuePrompt("Press enter to continue. Make sure Steam is closed as it will overwrite the parameters otherwise");
-
-    std::ifstream readTempFile(paths::tempPath);
-    std::getline(readTempFile, newLaunchParameters);
 
     paramPath->attribs["LaunchOptions"] = newLaunchParameters;
 
