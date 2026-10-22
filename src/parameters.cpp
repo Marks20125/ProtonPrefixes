@@ -61,8 +61,13 @@ void parameters()
         launchParameters = "";
     }
 
-    std::vector<std::string> params {"DLL Overrides", "mangohud "};
-    std::cout << "Available launch parameters:\n";
+    std::vector<std::string> params {
+        "DLL Overrides",
+        "Share prefix",
+        "PROTON_ENABLE_NVAPI=1 ",
+        "mangohud "
+    };
+    std::cout << "\nAvailable launch parameters:\n";
 
     for (int i = 0; i < params.size(); i++)
     {
@@ -82,26 +87,36 @@ void parameters()
 
         if (selectedParam == "DLL Overrides")
         {
-            std::cout << "What DLLs do you want to override?: ";
+            std::cout << "Enter the DLLs you want to override separated by a space: ";
             std::string dllsStr {};
             std::getline(std::cin, dllsStr);
             std::vector<std::string> dlls {searchForTextInString(dllsStr)};
 
             selectedParam = "WINEDLLOVERRIDES=\"";
 
-            for (int i = 0; i < dlls.size(); i++)
+            for (int j = 0; j < dlls.size(); j++)
             {
-                if (i == dlls.size() - 1)
+                if (j == dlls.size() - 1)
                 {
-                    selectedParam += dlls[i];
+                    selectedParam += dlls[j];
                 }
                 else
                 {
-                    selectedParam += dlls[i] + ",";
+                    selectedParam += dlls[j] + ",";
                 }
             }
 
             selectedParam += "=n,b\" ";
+        }
+        else if (selectedParam == "Share prefix")
+        {
+            std::ifstream readJsonFile{paths::jsonPath};
+            auto jsonData = nlohmann::json::parse(readJsonFile);
+
+            std::cout << "\nWhere do you want " << selectedGameName << "'s prefix to be?\n";
+            std::string pfxID {getAppIDFromName(selectProcessedPrefix())};
+            std::filesystem::path pfxPath {jsonData[pfxID]["pfx"]};
+            selectedParam = "STEAM_COMPAT_DATA_PATH=\"" + pfxPath.string() + "\" ";
         }
 
         newLaunchParameters += selectedParam;
